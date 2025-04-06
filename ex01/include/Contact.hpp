@@ -10,12 +10,11 @@ class Contact {
     std::string phone_number_;
     std::string darkest_secret_;
 
-    Contact(const Contact&);
-    Contact& operator=(const Contact&);
-
   public:
     Contact();
     ~Contact();
+    Contact(const Contact&);
+    Contact& operator=(const Contact&);
 
     const std::string& get_first_name() const;
     const std::string& get_last_name() const;

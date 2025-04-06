@@ -3,6 +3,25 @@
 Contact::Contact() {}
 Contact::~Contact() {}
 
+Contact::Contact(const Contact& other)
+  : first_name_(other.first_name_)
+  , last_name_(other.last_name_)
+  , nickname_(other.nickname_)
+  , phone_number_(other.phone_number_)
+  , darkest_secret_(other.darkest_secret_) {}
+
+Contact& Contact::operator=(const Contact& other) {
+  if (this != &other) {
+    first_name_ = other.get_first_name();
+    last_name_ = other.get_last_name();
+    nickname_ = other.get_nickname();
+    phone_number_ = other.get_phone_number();
+    darkest_secret_ = other.get_darkest_secret();
+  }
+  return *this;
+}
+
+
 const std::string& Contact::get_first_name() const { return first_name_; }
 const std::string& Contact::get_last_name() const { return last_name_; }
 const std::string& Contact::get_nickname() const { return nickname_; }
