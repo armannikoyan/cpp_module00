@@ -1,29 +1,60 @@
-NAME := phonebook
+NAME        := phonebook
 
-SRCS := PhoneBook.cpp Contact.cpp
-OBJS := $(SRCS:.cpp=.o)
-DEPS := $(OBJS:.o=.d)
+CXX         := c++
+CXXFLAGS    := -Wall -Wextra -Werror -std=c++98 -MMD -MP
+CPPFLAGS    := -Iinclude
+LDFLAGS     :=
 
-CXX := c++
-CPPFLAGS := -Iinclude
-CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -MMD -MP
+SRCS        := main.cpp PhoneBook.cpp Contact.cpp
+OBJS        := $(SRCS:.cpp=.o)
+DEPS        := $(OBJS:.o=.d)
+
+RED         := \033[0;31m
+GREEN       := \033[0;32m
+YELLOW      := \033[0;33m
+BLUE        := \033[0;34m
+NC          := \033[0m
+
+DONE_CHAR   := $(GREEN)✓$(NC)
+OBJ_CHAR    := $(BLUE)●$(NC)
+
+.DEFAULT_GOAL := all
 
 all: $(NAME)
+	@printf "$(DONE_CHAR) Project $(NAME) ready\n"
 
 $(NAME): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $@
+	@printf "$(YELLOW)⚡ Linking $(NAME)...$(NC)\n"
+	@$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+	@printf "$(DONE_CHAR) Executable built: $(GREEN)$@$(NC)\n"
+
+%.o: %.cpp
+	@printf "$(OBJ_CHAR) Compiling $(notdir $<)...\n"
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
 
 -include $(DEPS)
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 clean:
-	$(RM) $(OBJS) $(DEPS)
+	@printf "$(RED)♻️  Cleaning object files...$(NC)\n"
+	@$(RM) $(OBJS) $(DEPS)
 
 fclean: clean
-	$(RM) $(NAME)
+	@printf "$(RED)♻️  Removing $(NAME)...$(NC)\n"
+	@$(RM) $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+debug: CXXFLAGS += -g3 -O0
+debug: all
+	@printf "$(DONE_CHAR) Debug build complete\n"
+
+help:
+	@echo "Available targets:"
+	@echo "$(GREEN)all$(NC)     - Build project (default)"
+	@echo "$(GREEN)clean$(NC)   - Remove object files"
+	@echo "$(GREEN)fclean$(NC)  - Remove object files and executable"
+	@echo "$(GREEN)re$(NC)      - Rebuild project"
+	@echo "$(GREEN)debug$(NC)   - Build with debug symbols"
+	@echo "$(GREEN)help$(NC)    - Show this help message"
+
+.PHONY: all clean fclean re debug help
