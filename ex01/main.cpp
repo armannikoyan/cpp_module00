@@ -17,19 +17,30 @@ int main()
 
   while (true)
   {
-    std::cout << "Enter command (ADD/SEARCH/EXIT): ";
-    std::getline(std::cin, input);
+    do
+    {
+      std::cout << "Enter command (ADD/SEARCH/EXIT): ";
+      if (!std::getline(std::cin, input))
+      {
+        if (std::cin.eof())
+          return 0;
+      }
+    } while (input.empty());
+
     switch (getCommand(input))
     {
       case ADD:
         pb.add();
         break;
       case SEARCH:
+        pb.search();
         break;
       case EXIT:
-        return (0);
+        return 0;
       default:
         continue;
     }
+
+    std::cout << "\n";
   }
 }

@@ -10,8 +10,10 @@ Contact::Contact(const Contact& other)
   , phone_number_(other.phone_number_)
   , darkest_secret_(other.darkest_secret_) {}
 
-Contact& Contact::operator=(const Contact& other) {
-  if (this != &other) {
+Contact& Contact::operator=(const Contact& other)
+{
+  if (this != &other)
+  {
     first_name_ = other.get_first_name();
     last_name_ = other.get_last_name();
     nickname_ = other.get_nickname();

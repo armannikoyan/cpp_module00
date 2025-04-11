@@ -1,7 +1,8 @@
 #include "include/PhoneBook.hpp"
 
 PhoneBook::PhoneBook()
-  : index_(0) {}
+  : index_(0)
+  , is_full_(false) {}
 PhoneBook::~PhoneBook() {}
 
 PhoneBook::PhoneBook(const PhoneBook& other)
@@ -14,6 +15,7 @@ PhoneBook& PhoneBook::operator=(const PhoneBook& other)
   if (this != &other)
   {
     index_ = other.index_;
+    is_full_ = other.is_full_;
 
     for(unsigned short i = 0; i <= other.index_; ++i)
       contacts_[i] = other.contacts_[i];
@@ -95,8 +97,75 @@ void PhoneBook::add()
   } while (input.empty());
   contact.set_darkest_secret(input);
 
-  contacts_[index_++ % MAX_CONTACT_SIZE] = contact;
+  contacts_[index_] = contact;
+  if (!is_full_ && ++index_ == MAX_CONTACT_SIZE)
+    is_full_ = true;
+  index_ %= MAX_CONTACT_SIZE;
 }
 
-void PhoneBook::search() {
+std::string PhoneBook::truncate(const std::string& str) {
+    if (str.length() > MAX_COLUMN_SIZE) {
+        std::string truncated = str.substr(0, MAX_COLUMN_SIZE - 1);
+        truncated += ".";
+        return truncated;
+    }
+    return str;
+}
+
+void PhoneBook::search()
+{
+  int index;
+
+  if (!is_full_ && index_ == 0)
+  {
+    std::cout << "No contacts found in the phonebook\n";
+    return;
+  }
+  else 
+  {
+    std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << "Index"
+      << "|" << std::setw(MAX_COLUMN_SIZE) << "First Name"
+      << "|" << std::setw(MAX_COLUMN_SIZE) << "Last Name"
+      << "|" << std::setw(MAX_COLUMN_SIZE) << "Nickname" << "|\n";
+    for (unsigned short i = 0; (is_full_ && i < MAX_CONTACT_SIZE) || (i < index_); ++i)
+    {
+      std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << i
+        << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[i].get_first_name())
+        << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[i].get_last_name())
+        << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[i].get_nickname()) << "|\n";
+    }
+  }
+
+  do
+  {
+    std::cout << "\nEnter index of the entry: ";
+    if (!(std::cin >> index))
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << "Error: Invalid input. Please enter a number.\n";
+      continue;
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    index = index % MAX_CONTACT_SIZE;
+    if (index < 0)
+      std::cout << "Error: index cannot be negative.\n";
+  } while (index < 0);
+
+  if (!is_full_ && index >= index_)
+  {
+    std::cout << "Error: No contact found with this index.\n";
+    return;
+  }
+
+  std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << "Index"
+    << "|" << std::setw(MAX_COLUMN_SIZE) << "First Name"
+    << "|" << std::setw(MAX_COLUMN_SIZE) << "Last Name"
+    << "|" << std::setw(MAX_COLUMN_SIZE) << "Nickname" << "|\n";
+  std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << index
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_first_name())
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_last_name())
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_nickname()) << "|\n";
 }
