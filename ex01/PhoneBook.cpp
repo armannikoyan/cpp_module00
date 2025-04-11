@@ -98,8 +98,7 @@ void PhoneBook::add()
   contact.set_darkest_secret(input);
 
   contacts_[index_] = contact;
-  ++index_;
-  if (!is_full_ && index_ == MAX_CONTACT_SIZE)
+  if (++index_ == MAX_CONTACT_SIZE && !is_full_)
     is_full_ = true;
   index_ %= MAX_CONTACT_SIZE;
 }
