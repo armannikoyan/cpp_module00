@@ -12,7 +12,7 @@ int main(int argc, char **argv)
   for (int row = 1; row < argc; ++row)
   {
     std::string line(argv[row]);
-    for (ssize_t i = 0; i < line.length(); ++i)
+    for (size_t i = 0; i < line.length(); ++i)
       line[i] = std::toupper(line[i]);
     std::cout << line;
   }

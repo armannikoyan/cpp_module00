@@ -84,7 +84,7 @@ void PhoneBook::add()
     std::cout << "Enter Phone Number: ";
     std::getline(std::cin, input);
     if (!isValidPhoneNumber(input))
-      std::cout << "Error: Phone Number cannot be empty and must contain only letters and numbers.\n";
+      std::cout << "Error: Phone Number cannot be empty and must contain only numbers.\n";
   } while (!isValidPhoneNumber(input));
   contact.set_phone_number(input);
 
@@ -98,7 +98,8 @@ void PhoneBook::add()
   contact.set_darkest_secret(input);
 
   contacts_[index_] = contact;
-  if (!is_full_ && ++index_ == MAX_CONTACT_SIZE)
+  ++index_;
+  if (!is_full_ && index_ == MAX_CONTACT_SIZE)
     is_full_ = true;
   index_ %= MAX_CONTACT_SIZE;
 }
@@ -160,12 +161,14 @@ void PhoneBook::search()
     return;
   }
 
-  std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << "Index"
-    << "|" << std::setw(MAX_COLUMN_SIZE) << "First Name"
-    << "|" << std::setw(MAX_COLUMN_SIZE) << "Last Name"
-    << "|" << std::setw(MAX_COLUMN_SIZE) << "Nickname" << "|\n";
-  std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << index
-    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_first_name())
+  std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << truncate("First Name")
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate("Last Name")
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate("Nickname")
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate("Darkest Secret")
+    << "|\n";
+  std::cout << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_first_name())
     << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_last_name())
-    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_nickname()) << "|\n";
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_nickname())
+    << "|" << std::setw(MAX_COLUMN_SIZE) << truncate(contacts_[index].get_darkest_secret())
+    << "|\n";
 }
