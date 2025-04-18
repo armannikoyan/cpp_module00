@@ -112,9 +112,18 @@ std::string PhoneBook::truncate(const std::string& str) {
     return str;
 }
 
+static bool is_numberic(const std::string& str)
+{
+  for (size_t i = 0; i < str.length(); ++i)
+    if (!std::isdigit(str[i]))
+      return false;
+  return true;
+}
+
 void PhoneBook::search()
 {
   int index;
+  std::string input;
 
   if (!is_full_ && index_ == 0)
   {
@@ -139,22 +148,15 @@ void PhoneBook::search()
   do
   {
     std::cout << "\nEnter index of the entry: ";
-    if (!(std::cin >> index))
-    {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      std::cout << "Error: Invalid input. Please enter a number.\n";
-      continue;
-    }
+    std::getline(std::cin, input);
+    if (input.empty())
+      std::cout << "Error: Index cannot be empty.\n";
+    else if (!is_numberic(input))
+      std::cout << "Index can contain only positive numbers.\n";
+  } while (input.empty() || !is_numberic(input));
 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    index = index % MAX_CONTACT_SIZE;
-    if (index < 0)
-      std::cout << "Error: index cannot be negative.\n";
-  } while (index < 0);
-
-  if (!is_full_ && index >= index_)
+  index = std::atoi(input.data());
+  if ((!is_full_ && index >= index_) || (is_full_ && index < MAX_CONTACT_SIZE))
   {
     std::cout << "Error: No contact found with this index.\n";
     return;
