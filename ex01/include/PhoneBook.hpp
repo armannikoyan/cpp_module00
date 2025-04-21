@@ -4,6 +4,7 @@
 #include <cctype>
 #include <iomanip>
 #include <limits>
+#include <cstdlib>
 
 #include "Contact.hpp"
 
