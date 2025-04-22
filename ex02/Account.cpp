@@ -6,7 +6,7 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 22:34:47 by anikoyan          #+#    #+#             */
-/*   Updated: 2025/04/17 21:15:23 by anikoyan         ###   ########.fr       */
+/*   Updated: 2025/04/22 14:32:57 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,4 +129,3 @@ void Account::_displayTimestamp()
 
   // std::cout << "[19920104_091532]";
 }
-
