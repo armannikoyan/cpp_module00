@@ -6,7 +6,7 @@
 /*   By: anikoyan <anikoyan@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 14:32:24 by anikoyan          #+#    #+#             */
-/*   Updated: 2025/04/22 14:32:25 by anikoyan         ###   ########.fr       */
+/*   Updated: 2025/04/22 21:57:33 by anikoyan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ void PhoneBook::search()
   } while (input.empty() || !is_numberic(input));
 
   index = std::atoi(input.data());
-  if ((!is_full_ && index >= index_) || (is_full_ && index < MAX_CONTACT_SIZE))
+  if ((!is_full_ && index >= index_) || (is_full_ && index > MAX_CONTACT_SIZE))
   {
     std::cout << "Error: No contact found with this index.\n";
     return;
